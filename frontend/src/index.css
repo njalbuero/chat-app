@@ -6,6 +6,10 @@ body {
   background-color: ##1c232b;
 }
 
+input {
+	color: white;
+}
+
 /* dark mode looking scrollbar */
 ::-webkit-scrollbar {
 	width: 8px;

@@ -1,5 +1,6 @@
 import Message from "../models/message.model.js";
 import Conversation from "../models/conversation.model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 export const sendMessage = async (req, res) => {
   try {
     const receiverId = req.params.id;
@@ -25,17 +26,21 @@ export const sendMessage = async (req, res) => {
 
       conversation.messages.push(newMessage._id);
 
-      //socket io functionality here
-
       await Promise.all([newMessage.save(), conversation.save()]);
 
-      res.status(200).json(newMessage);
+      const receiverSocketId = getReceiverSocketId(receiverId);
+      if (receiverSocketId) {
+        // io.to(<socket_id>).emit() used to send events to specific client
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+      }
+
+      return res.status(200).json(newMessage);
     } else {
-      res.status(400).json({ error: "Invalid message data" });
+      return res.status(400).json({ error: "Invalid message data" });
     }
   } catch (error) {
     console.log("Error in send message controller", error.message);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Internal server error",
     });
   }
@@ -51,13 +56,13 @@ export const getMessages = async (req, res) => {
     }).populate("messages");
 
     if (conversation) {
-      res.status(200).json(conversation.messages);
+      return res.status(200).json(conversation.messages);
     } else {
-      res.status(200).json([]);
+      return res.status(200).json([]);
     }
   } catch (error) {
     console.log("Error in get messages controller", error.message);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Internal server error",
     });
   }

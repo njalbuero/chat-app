@@ -1,12 +1,17 @@
 import { RiLogoutBoxLine } from "react-icons/ri";
+import useLogout from "../../hooks/useLogout";
 
 const Logout = () => {
+  const { loading, logout } = useLogout();
+
   return (
-    <div className="p-4 mt-auto flex items-center">
-      <button>
-        <RiLogoutBoxLine className="h-8 w-8" />
-      </button>
-    </div>
+    <button>
+      {!loading ? (
+        <RiLogoutBoxLine className="h-8 w-8" onClick={logout}/>
+      ) : (
+        <span className="loading loading-spinner"></span>
+      )}
+    </button>
   );
 };
 

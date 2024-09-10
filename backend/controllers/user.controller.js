@@ -7,10 +7,10 @@ export const getUsersForSidebar = async (req, res) => {
       _id: { $ne: userId },
     }).select("-password");
 
-    res.status(200).json(filteredUsers);
+    return res.status(200).json(filteredUsers);
   } catch (error) {
     console.log("Error in get users for sidebar controller", error.message);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Internal server error",
     });
   }
