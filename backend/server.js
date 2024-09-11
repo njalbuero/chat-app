@@ -29,7 +29,6 @@ app.get("*", (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log('adad', __dirname);
   connectToMongoDB();
   console.log(`Server running on port ${PORT}`);
 });
