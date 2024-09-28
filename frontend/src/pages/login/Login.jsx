@@ -1,24 +1,19 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import Logo from "../../components/Logo";
+import { useForm } from "react-hook-form";
+import Input from "../../components/form-controls/Input";
 
 const Login = () => {
-  const [inputFields, setInputFields] = useState({
-    username: "",
-    password: "",
-  });
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const { loading, login } = useLogin();
 
-  const handleInputChange = (event, field) => {
-    const value = event.target.value;
-    setInputFields((values) => ({ ...values, [field]: value }));
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    await login(inputFields);
+  const onSubmit = async (data) => {
+    await login(data);
   };
 
   return (
@@ -30,32 +25,26 @@ const Login = () => {
         <h1 className="mt-0 mb-4 text-2xl">Welcome to Piper Chat</h1>
         <p className="font-extralight">Please enter your account details</p>
       </div>
-      <form className="space-y-4" onSubmit={handleFormSubmit}>
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-4">
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Username</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Enter your username"
-              className="input input-bordered w-full"
-              value={inputFields.username}
-              onChange={(e) => handleInputChange(e, "username")}
-            />
-          </label>
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Password</span>
-            </div>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="input input-bordered w-full"
-              value={inputFields.password}
-              onChange={(e) => handleInputChange(e, "password")}
-            />
-          </label>
+          <Input
+            name="username"
+            label="Username"
+            register={register}
+            options={{ required: true }}
+            placeholder="Enter your username"
+            type="text"
+            errors={errors}
+          />
+          <Input
+            name="password"
+            label="Password"
+            register={register}
+            options={{ required: true }}
+            placeholder="Enter your password"
+            type="password"
+            errors={errors}
+          />
         </div>
         <div>
           <a href="/" className="text-sm font-medium no-underline">

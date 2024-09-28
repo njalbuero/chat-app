@@ -1,31 +1,22 @@
 import GenderSelection from "./GenderSelection";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 import useSignup from "../../hooks/useSignup";
 import Logo from "../../components/Logo";
+import Input from "../../components/form-controls/Input";
 const SignUp = () => {
-  const [inputFields, setInputFields] = useState({
-    fullName: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    gender: "male",
-  });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   const { loading, signup } = useSignup();
 
-  const handleInputChange = (event, field) => {
-    const value = event.target.value;
-    setInputFields((values) => ({ ...values, [field]: value }));
-  };
-
-  const handleGenderChange = (gender) => {
-    setInputFields((values) => ({ ...values, gender }));
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    await signup(inputFields);
+  const onSubmit = async (data) => {
+    await signup(data);
   };
 
   return (
@@ -36,57 +27,52 @@ const SignUp = () => {
       <div className="text-center">
         <h1 className="mt-0 ">Sign Up</h1>
       </div>
-      <form onSubmit={(e) => handleFormSubmit(e)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-4">
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Name</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Enter your name"
-              className="input input-bordered w-full"
-              value={inputFields.name}
-              onChange={(e) => handleInputChange(e, "fullName")}
-            />
-          </label>
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Username</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Enter your desired username"
-              className="input input-bordered w-full"
-              value={inputFields.username}
-              onChange={(e) => handleInputChange(e, "username")}
-            />
-          </label>
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Password</span>
-            </div>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="input input-bordered w-full"
-              value={inputFields.password}
-              onChange={(e) => handleInputChange(e, "password")}
-            />
-          </label>
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Confirm Password</span>
-            </div>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="input input-bordered w-full"
-              value={inputFields.confirmPassword}
-              onChange={(e) => handleInputChange(e, "confirmPassword")}
-            />
-          </label>
-          <GenderSelection onGenderChange={handleGenderChange} />
+          <Input
+            name="fullName"
+            label="Full Name"
+            register={register}
+            options={{ required: true }}
+            placeholder="Enter your full name"
+            type="text"
+            errors={errors}
+          />
+          <Input
+            name="username"
+            label="Username"
+            register={register}
+            options={{ required: true }}
+            placeholder="Enter your desired username"
+            type="text"
+            errors={errors}
+          />
+          <Input
+            name="password"
+            label="Password"
+            register={register}
+            options={{ required: true }}
+            placeholder="Enter your password"
+            type="password"
+            errors={errors}
+          />
+          <Input
+            name="confirmPassword"
+            label="Confirm Password"
+            register={register}
+            options={{
+              required: true,
+              validate: (val) => {
+                if (watch("password") != val) {
+                  return "Passwords do not match";
+                }
+              },
+            }}
+            placeholder="Confirm your password"
+            type="password"
+            errors={errors}
+          />
+          <GenderSelection register={register} />
         </div>
         <button
           className="btn btn-primary w-full text-white mt-8"
