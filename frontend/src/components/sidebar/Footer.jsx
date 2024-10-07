@@ -1,5 +1,6 @@
 import Logout from "./Logout";
 import { useAuthContext } from "../../context/AuthContext";
+import Avatar from "../avatar";
 
 const Footer = () => {
   const { authUser } = useAuthContext();
@@ -7,11 +8,7 @@ const Footer = () => {
   return (
     <div className="p-4 mt-auto flex items-center justify-between">
       <Logout />
-      <div className="avatar">
-        <div className="w-12 rounded-full">
-          <img src={authUser.profilePic} />
-        </div>
-      </div>
+      <Avatar user={authUser} />
     </div>
   );
 };

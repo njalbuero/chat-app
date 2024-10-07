@@ -1,7 +1,7 @@
-import useSearchConversation from "../../zustand/useSearchConversation";
+import useSearchUser from "../../zustand/useSearchUser";
 
 const SearchInput = () => {
-  const {search,setSearch} = useSearchConversation();
+  const {search,setSearch} = useSearchUser();
 
   return (
     <form className="p-4 flex items-center gap-2">

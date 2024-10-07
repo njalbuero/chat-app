@@ -1,13 +1,11 @@
 import useConversation from "../../zustand/useConversation";
-import useSearchConversation from "../../zustand/useSearchConversation";
-import { useSocketContext } from "../../context/SocketContext";
+import useSearchUser from "../../zustand/useSearchUser";
+import Avatar from "../avatar";
 
 const Conversation = ({ conversation }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
-  const { search, setSearch } = useSearchConversation();
-  const { onlineUsers } = useSocketContext();
-  const isOnline = onlineUsers.includes(conversation._id);
+  const { search, setSearch } = useSearchUser();
 
   const handleSelectConversation = () => {
     setSelectedConversation(conversation);
@@ -25,15 +23,12 @@ const Conversation = ({ conversation }) => {
         }`}
         onClick={handleSelectConversation}
       >
-        <div className={`avatar ${isOnline ? "online" : ""}`}>
-          <div className="w-12 rounded-full">
-            <img src={conversation.profilePic} />
-          </div>
-        </div>
-        <div>
-          <span className="text-sm font-semibold text-white">
-            {conversation.fullName}
+        <Avatar user={conversation.recipient} />
+        <div className="flex flex-col gap-1 w-full">
+          <span className="text-sm font-semibold text-white truncate">
+            {conversation.recipient.fullName}
           </span>
+          <span className="truncate">{conversation.lastMessage?.message}</span>
         </div>
       </div>
     </>
