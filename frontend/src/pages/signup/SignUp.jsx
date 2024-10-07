@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 
 import useSignup from "../../hooks/useSignup";
 import Logo from "../../components/Logo";
-import Input from "../../components/form-controls/Input";
+import Input from "../../components/formControls/Input";
 const SignUp = () => {
   const {
     register,

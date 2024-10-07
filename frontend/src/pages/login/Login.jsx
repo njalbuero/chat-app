@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 import Logo from "../../components/Logo";
 import { useForm } from "react-hook-form";
-import Input from "../../components/form-controls/Input";
+import Input from "../../components/formControls/Input";
 
 const Login = () => {
   const {
