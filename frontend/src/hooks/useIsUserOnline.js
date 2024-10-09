@@ -1,8 +1,8 @@
 import { useSocketContext } from "../context/SocketContext";
 
-const useIsUserIsOnline = (id) => {
+const useIsUserOnline = (id) => {
   const { onlineUsers } = useSocketContext();
   return onlineUsers.includes(id);
 };
 
-export default useIsUserIsOnline;
+export default useIsUserOnline;

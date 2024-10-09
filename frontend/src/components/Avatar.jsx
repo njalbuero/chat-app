@@ -1,7 +1,7 @@
-import useIsUserIsOnline from "../hooks/useIsUserIsOnline";
+import useIsUserOnline from "../hooks/useIsUserOnline";
 
 const Avatar = ({ user, width = "w-12", chatBubble = false }) => {
-  const isOnline = useIsUserIsOnline(user._id);
+  const isOnline = useIsUserOnline(user._id);
 
   return (
     <div className={`avatar ${isOnline ? "online" : ""} ${chatBubble ? "chat-image" : ""}`}>

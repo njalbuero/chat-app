@@ -1,3 +1,4 @@
+import { useAuthContext } from "../../context/AuthContext";
 import useConversation from "../../zustand/useConversation";
 import useSearchUser from "../../zustand/useSearchUser";
 import Avatar from "../avatar";
@@ -5,6 +6,15 @@ import Avatar from "../avatar";
 const Conversation = ({ conversation }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
+
+  const { authUser } = useAuthContext();
+  const isSentByUser = conversation.lastMessage?.sender._id === authUser._id;
+  console.log(
+    typeof conversation.lastMessage?.sender._id,
+    typeof authUser._id,
+    isSentByUser
+  );
+
   const { search, setSearch } = useSearchUser();
 
   const handleSelectConversation = () => {
@@ -28,7 +38,9 @@ const Conversation = ({ conversation }) => {
           <span className="text-sm font-semibold text-white truncate">
             {conversation.recipient.fullName}
           </span>
-          <span className="truncate">{conversation.lastMessage?.message}</span>
+          <span className="truncate">
+            {`${isSentByUser ? "You: " : ""}${conversation.lastMessage?.message}`}
+          </span>
         </div>
       </div>
     </>
