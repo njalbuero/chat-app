@@ -10,12 +10,10 @@ export const getConversations = async (req, res) => {
     })
       .populate({
         path: "messages",
-        limit: 1,
+        perDocumentLimit: 1,
         populate: { path: "senderId" },
       })
-      .populate({ path: "participants", match: { _id: { $ne: userId } } });
-
-      console.log(conversations)
+      .populate({ path: "participants", match: { _id: { $ne: userId } } })
 
     if (!conversations || conversations.length === 0) {
       return res.status(200).json([]);
